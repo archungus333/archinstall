@@ -47,13 +47,15 @@ mkinitcpio -p linux
 bootctl --path=/boot install
 echo default arch >> /boot/loader/loader.conf
 echo timeout 5 >> /boot/loader/loader.conf
-blkid -s UUID -o value /dev/sda2 > uuid.tmp
-uuid=$(<uuid.tmp)
+# blkid -s UUID -o value /dev/sda2 > uuid.tmp
+blkid -s PARTUUID -o value /dev/sda2 > /tmp/partuuid.tmp
+partuuid=$(</tmp/partuuid.tmp)
 echo "title Arch Linux" >> /boot/loader/entries/arch.conf
 echo "linux /vmlinuz-linux" >> /boot/loader/entries/arch.conf
 echo "initrd /intel-ucode.img" >> /boot/loader/entries/arch.conf
 echo "initrd /initramfs-linux.img" >> /boot/loader/entries/arch.conf
-echo "options cryptdevice=UUID=$uuid:vg0 root=/dev/mapper/vg0-root" >> /boot/loader/entries/arch.conf
+# echo "options cryptdevice=UUID=$uuid:vg0 root=/dev/mapper/vg0-root" >> /boot/loader/entries/arch.conf
+echo "options cryptdevice=PARTUUID=$partuuid:vg0 root=/dev/mapper/vg0-root" >> /boot/loader/entries/arch.conf
 
 # Systemd
 systemctl disable NetworkManager
