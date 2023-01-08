@@ -12,7 +12,7 @@ lsblk
 read -p "[Select Drive]: " sysdrive
 
 # Partitioning
-wipefs --all $sysdrive
+wipefs -a $sysdrive
 (
   echo g;
   echo n;
